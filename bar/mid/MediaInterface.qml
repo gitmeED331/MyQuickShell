@@ -5,7 +5,7 @@ import QtQuick.Controls
 import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Mpris
+import Quickshell.services.Mpris
 
 PopupWindow {
     property bool targetVisible: false
