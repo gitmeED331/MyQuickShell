@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Mpris
 
 PopupWindow {
     property bool targetVisible: false
@@ -214,7 +215,11 @@ PopupWindow {
 
                         Slider {
                             id: mediaSlider
-
+														value: Mpris.position
+														live: true
+														pressed: true
+to: 1.5
+onMoved{}
                             Layout.alignment: Qt.AlignHCenter
                             anchors.centerIn: parent
                             width: parent.width - 30
