@@ -1,40 +1,97 @@
+import "./bar/left"
+import "./bar/mid"
+import "./bar/right"
 import QtQuick
-import QtQuick.Layouts
-import QtQuick.Particles
-import QtQuick.Effects
-import QtQuick.Shapes
-import QtQuick.Controls
-import QtQuick.Controls.Material
 import Quickshell
-import Quickshell.Io
 import Quickshell.Wayland
 
 ShellRoot {
-	id: root
+    ReloadPopup {
+    }
 
-	Socket {
-		// Create and connect a Socket to the hyprland event socket.
-		// https://wiki.hyprland.org/IPC/
-		path: `/tmp/hypr/${Quickshell.env("HYPRLAND_INSTANCE_SIGNATURE")}/.socket2.sock`
-		connected: true
+    Variants {
+        model: Quickshell.screens
 
-		parser: SplitParser {
-			// Regex that will return the newly focused monitor when it changes.
-			property var regex: new RegExp("focusedmon>>(.+),.*");
+        delegate: Component {
+            PanelWindow {
+                id: panel
 
-			// Sent for every line read from the socket
-			onRead: msg => {
-				const match = regex.exec(msg);
+                property var modelData
 
-				if (match != null) {
-					// Filter out the right screen from the list and update the panel.
-					// match[1] will always be the monitor name captured by the regex.
-                    panel.screen = Quickshell.screens.filter(screen => screen.name === match[1])[0];
-				}
-			}
-		}
-	}
-	
-	Bar {}
-	
+                screen: modelData
+                height: screen.height
+                width: screen.width
+                exclusiveZone: 40
+                color: "transparent"
+
+                anchors {
+                    top: true
+                    left: true
+                    right: true
+                }
+
+                Item {
+                    id: rect
+
+                    width: screen.width
+                    height: panel.exclusiveZone
+
+                    LazyLoader {
+                        id: audioMixerPopup
+
+                        loading: true
+
+                        AudiomixerInterface {
+                        }
+
+                    }
+
+                    Lbar {
+                        anchors {
+                            bottom: parent.bottom
+                            left: parent.left
+                            leftMargin: 10
+                        }
+
+                    }
+
+                    Mbar {
+                        anchors {
+                            bottom: parent.bottom
+                            horizontalCenter: parent.horizontalCenter
+                        }
+
+                    }
+
+                    Rbar {
+                        anchors {
+                            bottom: parent.bottom
+                            right: parent.right
+                            rightMargin: 10
+                        }
+
+                    }
+
+                    LazyLoader {
+                        id: mediaPopup
+
+                        loading: true
+
+                        MediaInterface {
+                        }
+
+                    }
+
+                }
+
+                mask: Region {
+                    item: rect
+                }
+
+            }
+
+        }
+
+    }
+
 }
