@@ -1,9 +1,7 @@
-import "../../"
-import "../../functions"
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
-import Quickshell.Services.Mpris
+import "root:"
+import "root:functions"
 
 Rectangle {
     id: root
@@ -12,7 +10,7 @@ Rectangle {
 
     height: parent.height - 5
     width: 350
-    radius: 30
+    radius: 10
     border.color: Cfg.colors.border
     border.width: 1.5
     clip: true
@@ -22,57 +20,44 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
-            mediaPopup.item.targetVisible = !mediaPopup.item.targetVisible;
-        }
-        onEntered: {
-            title.color = Cfg.colors.color5;
-            artist.color = Cfg.colors.color1;
-        }
-        onExited: {
-            title.color = Cfg.colors.color1;
-            artist.color = Cfg.colors.color5;
+            mediaPopup.item.mediaTargetVisible = !mediaPopup.item.mediaTargetVisible;
         }
     }
 
-    RowLayout {
+    Text {
+        id: title
+
         x: (root.width / 2) - (width / 2)
         anchors.verticalCenter: parent.verticalCenter
-
-        Text {
-            id: title
-
-            text: Mpris.mediaTitle
-            font.pixelSize: 12
-            font.family: Cfg.font
-            color: Cfg.colors.color1
-            font.bold: true
+        text: Mpris.mediaTitle
+        font.pixelSize: 16
+        font.family: Cfg.font
+        color: "white"
+        onWidthChanged: {
+            if (width > parent.width)
+                movingText.running = true;
+            else
+                movingText.running = false;
         }
 
-        Rectangle {
-            anchors.centerIn: parent
-            width: parent.height - 10
-            height: parent.height - 10
+        NumberAnimation {
+            id: movingText
 
-            Image {
-                id: playerIcon
-
-                source: Quickshell.iconPath(Mpris.desktopEntry)
-                anchors.centerIn: parent
-                width: parent.height
-                height: parent.height
-                visible: true
-            }
-
+            running: false
+            property: "x"
+            target: title
+            from: 0
+            to: -title.width - root.spacing
+            duration: title.width * 9
+            loops: Animation.Infinite
         }
 
         Text {
-            id: artist
-
-            text: Mpris.artist
-            font.bold: true
-            font.pixelSize: 12
-            font.family: Cfg.font
-            color: Cfg.colors.color5
+            x: movingText.running ? title.width + root.spacing : root.width
+            text: title.text
+            font.pixelSize: parent.font.pixelSize
+            font.family: parent.font.family
+            color: parent.color
         }
 
     }

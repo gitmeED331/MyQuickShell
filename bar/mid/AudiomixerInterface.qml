@@ -8,43 +8,34 @@ import Quickshell
 import Quickshell.Services.Pipewire
 
 PopupWindow {
-    // onTargetVisibleChanged: {
-    //     if (targetVisible) {
-    //         visible = true;
-    //         AudiomixerInterface.y = 0;
-    //     } else {
-    //         AudiomixerInterface.opacity = 0;
-    //     }
-    // }
+    id: audiomixerInterface
 
-    property bool targetVisible: false
+    property bool mixerTargetVisible: false
 
-    anchor.rect.x: panel.width / 2
-    anchor.rect.y: panel.exclusiveZone + 15
-    anchor.window: panel
-    width: 700
-    height: 350
-    color: "black"
-    visible: targetVisible
+    // anchor.rect.x: panel.width / 2 + width / 2
+    // anchor.rect.y: panel.exclusiveZone + 15
+    anchor.window: panel.output
+    width: childrenrect.width + 200
+    height: childrenrect.height + 75
+    visible: mixerTargetVisible
+    color: "transparent"
 
     Rectangle {
-        id: audiomixerInterface
+        id: childrenrect
 
-        width: parent.width
-        height: parent.height
+        anchors.fill: parent
+        anchors.centerIn: parent
+        color: Cfg.colors.mainBG
         radius: 15
-        y: -parent.height
-        layer.enabled: true
-        color: "pink"
-        onOpacityChanged: {
-            if (opacity == 0) {
-                audioMixerPopup.active = false;
-                audioMixerPopup.loading = true;
-            }
+
+        border {
+            color: Cfg.colors.border
+            width: 1.5
         }
 
         ScrollView {
             anchors.fill: parent
+            anchors.centerIn: parent
             contentWidth: availableWidth
 
             ColumnLayout {
@@ -85,25 +76,6 @@ PopupWindow {
 
         }
 
-        Behavior on y {
-            NumberAnimation {
-                duration: 400
-                easing.type: Easing.OutBack
-            }
-
-        }
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 200
-            }
-
-        }
-
-    }
-
-    mask: Region {
-        item: audiomixerInterface
     }
 
 }

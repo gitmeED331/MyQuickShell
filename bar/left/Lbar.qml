@@ -1,6 +1,7 @@
-import "../../"
 import QtQuick
 import QtQuick.Layouts
+
+import "../../"
 
 RowLayout {
     spacing: 10
@@ -11,19 +12,20 @@ RowLayout {
         border.color: "black"
         border.width: 1.5
         radius: 10
-        color: Cfg.colors.mainBG
+        color: "purple"
 
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true
+
             onEntered: {
-                parent.color = "grey";
+                parent.color = "grey"
             }
+
             onExited: {
-                parent.color = "purple";
+                parent.color = "purple"
             }
         }
-
     }
 
     Rectangle {
@@ -32,26 +34,44 @@ RowLayout {
         border.color: "black"
         border.width: 1.5
         radius: 10
-        color: Cfg.colors.mainBG
+        color: "purple"
 
         MouseArea {
-            // onEntered: {
-            //     parent.color = "grey";
-            // }
-            // onExited: {
-            //     parent.color = "purple";
-            // }
-
             anchors.fill: parent
             hoverEnabled: true
+
+            onEntered: {
+                parent.color = "grey"
+            }
+
+            onExited: {
+                parent.color = "purple"
+            }
         }
 
         RowLayout {
-            id: apptitle
-
+            id: sysInfo
             spacing: 10
             anchors.centerIn: parent
-            
+
+
+            RowLayout {
+                Text {
+                    text: ""
+                    font.pixelSize: 20
+                    font.family: Cfg.font
+                    color: "white"
+                }
+
+                Text {
+                    text: "0.1%"
+                    font.pixelSize: 20
+                    font.family: Cfg.font
+                    color: "white"
+                }
+            }
+
+            RowLayout {
                 Text {
                     text: ""
                     font.pixelSize: 20
@@ -65,11 +85,7 @@ RowLayout {
                     font.family: Cfg.font
                     color: "white"
                 }
-
             }
-
         }
-
     }
-
 }
